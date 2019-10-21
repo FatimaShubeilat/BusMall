@@ -157,7 +157,7 @@ function clickHandler(event) {
 
     if(BusMall.roundCtr === BusMall.roundLimit) {
 
-      alert('No more clicking for you!');
+      alert('More than 25 attempts are not allowed!');
 
       BusMall.container.removeEventListener('click', clickHandler);
 
