@@ -5,6 +5,7 @@ function BusMall(name, src) {
   this.src = src;
   this.clickCtr = 0;
   this.shownCtr = 0;
+
   BusMall.all.push(this);
 }
 
@@ -157,7 +158,9 @@ function clickHandler(event) {
 
     if(BusMall.roundCtr === BusMall.roundLimit) {
 
-      alert('More than 25 attempts are not allowed!');
+      createBusMallChart();
+
+      alert('More than 25 attempts are not allowed !');
 
       BusMall.container.removeEventListener('click', clickHandler);
 
@@ -169,8 +172,90 @@ function clickHandler(event) {
 }
 
 
+
+
+// function createArraysEntry(){
+
+//   var busMallTitlesArray = [];
+//   // var goatLikesArray =[];
+
+//   for(var i = 0; i < BusMall.all.length; i++){
+//     var busMallAtATime = BusMall.all[i].name;
+//     console.log(busMallAtATime);
+//     busMallTitlesArray.push(busMallAtATime);
+//   }
+function createBusMallChart(){
+  var busMallArray = [];
+  var votesArray = [];
+  var showArry = [];
+  for(var i= 0 ; i< BusMall.all.length ; i++){
+    var OneAtATime = BusMall.all[i].name;
+    var clickAtATime = BusMall.all[i].clickCtr;
+    var showAtATime = BusMall.all[i].shownCtr;
+    busMallArray.push(OneAtATime);
+    votesArray.push(clickAtATime);
+    showArry.push(showAtATime);
+
+  }
+  
+  
+ 
+    // for(var i= 0 ; i< BusMall.all.length ; i++){
+      
+    // var clickAtATime = BusMall.all[i].clickCtr;
+    // votesArray.push(clickAtATime);
+    // }
+  
+    // for(var i= 0 ; i< BusMall.all.length ; i++){
+      
+    //   var shownAtTime = BusMall.all[i].shownCtr;
+    //   votesArray.push(shownAtTime);
+    //   }
+
+  var ctx = document.getElementById('busMAllChart').getContext('2d');
+  var busMAllChart = new Chart(ctx, {
+  // The type of chart we want to create
+    type: 'bar',
+
+    // The data for our dataset
+    data: {
+      labels: busMallArray,
+      
+      datasets: [
+        {
+        label: 'BusMall Voting Data',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: votesArray 
+      },
+      {
+        label: 'BusMall Show Data',
+        backgroundColor: 'rgb(255, 10, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data:  showArry
+      }
+
+    ]
+    },
+
+    // Configuration options go here
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+
+}
+
 BusMall.container.addEventListener('click', clickHandler);
 
 updateTotals();
 
 renderNewbusMalls();
+
+createBusMallChart();
