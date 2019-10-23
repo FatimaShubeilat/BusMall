@@ -222,5 +222,7 @@ function getVotes() {
   }
   renderNewbusMalls();
 }
-
+// Then I got the idea instead of converting to an array is to assign values to the object as we are used to this way
+// https://stackoverflow.com/questions/11057802/add-new-element-to-an-existing-object
+// but neither has worked ! :|
 
