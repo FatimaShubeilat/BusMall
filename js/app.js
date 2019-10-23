@@ -9,7 +9,7 @@ function BusMall(name, src) {
 }
 
 BusMall.roundCtr = 0;
-BusMall.roundLimit = 25;
+BusMall.roundLimit = 3;
 
 BusMall.all = [];
 
@@ -47,7 +47,7 @@ new BusMall('Wine Glass', 'images/wine-glass.jpg');
 
 function renderNewbusMalls() {
 
-  var forbidden = [BusMall.leftObject,BusMall.middleObject, BusMall.rightObject];
+  var forbidden = [BusMall.leftObject, BusMall.middleObject, BusMall.rightObject];
 
   do {
 
@@ -62,17 +62,17 @@ function renderNewbusMalls() {
 
     BusMall.middleObject = getRandombusMall();
 
-  } while(forbidden.includes(BusMall.middleObject));
+  } while (forbidden.includes(BusMall.middleObject));
 
   forbidden.push(BusMall.middleObject);
   do {
 
     BusMall.rightObject = getRandombusMall();
 
-  } while(forbidden.includes(BusMall.rightObject));
+  } while (forbidden.includes(BusMall.rightObject));
 
 
-  
+
   BusMall.leftObject.shownCtr++;
   BusMall.rightObject.shownCtr++;
   BusMall.middleObject.shownCtr++;
@@ -102,7 +102,7 @@ function getRandombusMall() {
 
 
 function randomInRange(min, max) {
-  var range = max - min + 1; 
+  var range = max - min + 1;
   var rand = Math.floor(Math.random() * range) + min
   return rand;
 }
@@ -115,7 +115,7 @@ function updateTotals() {
 
   var ul = document.createElement('ul');
   parentElement.appendChild(ul);
-  
+
   for (var i = 0; i < BusMall.all.length; i++) {
     var busMall = BusMall.all[i];
     var li = document.createElement('li');
@@ -128,7 +128,7 @@ function updateTotals() {
 function addElement(tag, container, text) {
   var element = document.createElement(tag);
   container.appendChild(element);
-  if(text) {
+  if (text) {
     element.textContent = text;
   }
   return element;
@@ -139,25 +139,27 @@ function clickHandler(event) {
   var clickedId = event.target.id;
   var busMallClicked;
 
-  if(clickedId === 'left-busMall-image') {
+  if (clickedId === 'left-busMall-image') {
     busMallClicked = BusMall.leftObject;
   } else if (clickedId === 'middle-busMall-image') {
     busMallClicked = BusMall.middleObject;
-  }else if (clickedId === 'right-busMall-image') {
+  } else if (clickedId === 'right-busMall-image') {
     busMallClicked = BusMall.rightObject;
   } else {
     console.log('Um, what was clicked on???', clickedId);
   }
 
-  if(busMallClicked) {
+  if (busMallClicked) {
     busMallClicked.clickCtr++;
     BusMall.roundCtr++;
 
     updateTotals();
 
-    if(BusMall.roundCtr === BusMall.roundLimit) {
+    if (BusMall.roundCtr === BusMall.roundLimit) {
 
       alert('More than 25 attempts are not allowed!');
+      updateVotes();
+      getVotes();
 
       BusMall.container.removeEventListener('click', clickHandler);
 
@@ -174,3 +176,53 @@ BusMall.container.addEventListener('click', clickHandler);
 updateTotals();
 
 renderNewbusMalls();
+
+
+var votes = document.getElementById('votes');
+
+
+function updateVotes() {
+
+  var trackVotesArray = [];
+  for (var i = 0; i < BusMall.all.length; i++) {
+    var trackvotes = BusMall.all[i];
+    trackVotesArray.push(trackvotes)
+
+  }
+  var votesString = JSON.stringify(trackVotesArray);
+  localStorage.setItem('votes', votesString);
+
+
+}
+function getVotes() {
+  var busMallData = JSON.parse(localStorage.getItem('orders')); // the busMallData but needs to be an array to support many object arrays
+
+  if (busMallData) {
+    for (var i = 0; i < busMallData.length; i++) {
+
+      new busMallObject( // // I saw this hint as to consider busMallObjet as an array first to push data to it 
+      //  https://stackoverflow.com/questions/14234646/adding-elements-to-object/14234701
+        rawBusMallObject.name,
+        rawBusMallObject.src,
+        rawBusMallObject.clickCtr,
+        rawBusMallObject.shownCtr 
+      );
+
+    }
+    for (var i = 0; i < busMallData.length; i++) {
+      var busMallObjectToArray = [];
+
+     busMallObjectToArray[i] =  rawBusMallObject.name,
+     busMallObjectToArray[i - 1] = rawBusMallObject.src,
+     busMallObjectToArray[i -2]  =  rawBusMallObject.clickCtr,
+     busMallObjectToArray[i - 3] = rawBusMallObject.shownCtr
+
+    }
+    busMallObjectToArray.push(busMallData[i]);
+  }
+  renderNewbusMalls();
+}
+// Then I got the idea instead of converting to an array is to assign values to the object as we are used to this way
+// https://stackoverflow.com/questions/11057802/add-new-element-to-an-existing-object
+// but neither has worked ! :|
+
