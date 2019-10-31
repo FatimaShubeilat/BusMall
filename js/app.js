@@ -9,7 +9,7 @@ function BusMall(name, src) {
 }
 
 BusMall.roundCtr = 0;
-BusMall.roundLimit = 3;
+BusMall.roundLimit = 15;
 
 BusMall.all = [];
 
@@ -134,8 +134,10 @@ function addElement(tag, container, text) {
   return element;
 }
 
-function clickHandler(event) {
 
+
+function clickHandler(event) {
+// to store which was clicked 
   var clickedId = event.target.id;
   var busMallClicked;
 
@@ -148,7 +150,7 @@ function clickHandler(event) {
   } else {
     console.log('Um, what was clicked on???', clickedId);
   }
-
+// check the truthy of the clicking
   if (busMallClicked) {
     busMallClicked.clickCtr++;
     BusMall.roundCtr++;
@@ -180,7 +182,7 @@ renderNewbusMalls();
 
 var votes = document.getElementById('votes');
 
-
+// to check the number of votes
 function updateVotes() {
 
   var trackVotesArray = [];
